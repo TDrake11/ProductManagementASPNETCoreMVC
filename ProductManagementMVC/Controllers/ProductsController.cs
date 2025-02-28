@@ -27,14 +27,18 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
 		// GET: Products
 		public async Task<IActionResult> Index()
 		{
-			if (HttpContext.Session.GetString("UserId") == null)
+			// Kiểm tra nếu Cookie "UserId" không tồn tại (chưa đăng nhập)
+			if (string.IsNullOrEmpty(HttpContext.Request.Cookies["UserId"]))
 			{
-				// Redirect to the login page or display an error message
+				// Redirect đến trang Login
 				return RedirectToAction("Login", "Account");
 			}
-			var myStoreDbContext = _productService.GetProducts();
-			return View(myStoreDbContext.ToList());
+
+			// Nếu đã đăng nhập, lấy danh sách sản phẩm
+			var myStoreDbContext = await _productService.GetProducts();
+			return View(myStoreDbContext);
 		}
+
 
 		// GET: Products/Details/5
 		public async Task<IActionResult> Details(int? id)
@@ -44,7 +48,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
                 return NotFound();
             }
 
-            var product = _productService.GetProductById((int)id);
+            var product = await _productService.GetProductById((int)id);
             if (product == null)
             {
                 return NotFound();
@@ -54,9 +58,9 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
         }
 
         // GET: Products/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(_categoryService.GetCategories(), "CategoryId", "CategoryId");
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryId");
             return View();
         }
 
@@ -69,10 +73,10 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _productService.SaveProduct(product);
+                await _productService.CreateProduct(product);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_categoryService.GetCategories(), "CategoryId", "CategoryId", product.Category);
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryId", product.Category);
             return View(product);
         }
 
@@ -84,12 +88,12 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
                 return NotFound();
             }
 
-            var product = _productService.GetProductById((int)id);
+            var product = await _productService.GetProductById((int)id);
             if (product == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_categoryService.GetCategories(), "CategoryId", "CategoryId", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryId", product.CategoryId);
             return View(product);
         }
 
@@ -124,7 +128,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_categoryService.GetCategories(), "CategoryId", "CategoryId", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList( await _categoryService.GetCategories(), "CategoryId", "CategoryId", product.CategoryId);
             return View(product);
         }
 
@@ -136,7 +140,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
                 return NotFound();
             }
 
-            var product = _productService.GetProductById((int)id);
+            var product = await _productService.GetProductById((int)id);
             if (product == null)
             {
                 return NotFound();
@@ -150,7 +154,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = _productService.GetProductById((int)id);
+            var product = await _productService.GetProductById((int)id);
             if (product != null)
             {
                 _productService.DeleteProduct(product);

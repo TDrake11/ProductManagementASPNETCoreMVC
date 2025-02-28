@@ -9,6 +9,6 @@ namespace PRN222.Lab1.Repositories.Repositories.AccountRepository
 {
 	public interface IAccountRepository
 	{
-		AccountMember GetAccountMember(string accountId);
+		AccountMember GetAccountMember(string email);
 	}
 }

@@ -9,11 +9,11 @@ namespace PRN222.Lab1.Services.Services.ProductService
 {
 	public interface IProductService
 	{
-		void SaveProduct(Product product);
+		Task CreateProduct(Product product);
 		void DeleteProduct(Product product);
 		void UpdateProduct(Product product);
-		List<Product> GetProducts();
-		Product GetProductById(int id);
+		Task<List<Product>> GetProducts();
+		Task<Product?> GetProductById(int id);
 
 	}
 }

@@ -6,6 +6,8 @@ using PRN222.Lab1.Repositories.Repositories.CategoryRepository;
 using PRN222.Lab1.Repositories.Repositories.ProductRepository;
 using PRN222.Lab1.Services.Services.AccountService;
 using PRN222.Lab1.Repositories.Repositories.AccountRepository;
+using PRN222.Lab1.Repositories.Interfaces;
+using PRN222.Lab1.Repositories.Repositories;
 
 namespace ProductManagementMVC
 {
@@ -23,6 +25,8 @@ namespace ProductManagementMVC
 			builder.Services.AddScoped<IProductRepository, ProductRepository>();
 			builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 			builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+			builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 			// Đăng ký Service
 			builder.Services.AddScoped<IProductService, ProductService>();

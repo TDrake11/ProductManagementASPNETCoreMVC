@@ -1,25 +1,22 @@
-﻿using PRN222.Lab1.Repositories.Entities;
-using PRN222.Lab1.Repositories.Repositories.CategoryRepository;
+﻿using Microsoft.EntityFrameworkCore;
 using PRN222.Lab1.Repositories.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PRN222.Lab1.Repositories.Interfaces;
+using PRN222.Lab1.Repositories.Repositories.CategoryRepository;
+
 
 namespace PRN222.Lab1.Services.Services.CategoryService
 {
 	public class CategoryService : ICategoryService
 	{
-		public readonly ICategoryRepository _categoryRepository;
+		private readonly IUnitOfWork _unitOfWork;
 
-		public CategoryService(ICategoryRepository categoryRepository)
+		public CategoryService(IUnitOfWork unitOfWork)
 		{
-			_categoryRepository = categoryRepository;
+			_unitOfWork = unitOfWork;
 		}
-		public List<Category> GetCategories()
+		public async Task<List<Category>> GetCategories()
 		{
-			return _categoryRepository.GetCategories();
+			return await _unitOfWork.Repository<Category>().GetList().ToListAsync();
 		}
 	}
 }

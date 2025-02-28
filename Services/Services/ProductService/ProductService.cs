@@ -5,40 +5,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PRN222.Lab1.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace PRN222.Lab1.Services.Services.ProductService
 {
 	public class ProductService : IProductService
 	{
-		public readonly IProductRepository _productRepository;
+		private readonly IUnitOfWork _unitOfWork;
 
-		public ProductService(IProductRepository productRepository)
+		public ProductService(IUnitOfWork unitOfWork)
 		{
-			_productRepository = productRepository;
+			_unitOfWork = unitOfWork;
 		}
 		public void DeleteProduct(Product product)
 		{
-			_productRepository.DeleteProduct(product);
+			_unitOfWork.Repository<Product>().Delete(product);
+			_unitOfWork.SaveChanges();
 		}
 
-		public Product GetProductById(int id)
+		public async Task<Product?> GetProductById(int id)
 		{
-			return _productRepository.GetProductById(id);
+			return await _unitOfWork.Repository<Product>().GetByIdAsync(id);
 		}
 
-		public List<Product> GetProducts()
+		public async Task<List<Product>> GetProducts()
 		{
-			return _productRepository.GetProducts();
+			return await _unitOfWork.Repository<Product>().GetList().ToListAsync();
 		}
 
-		public void SaveProduct(Product product)
+		public async Task CreateProduct(Product product)
 		{
-			_productRepository.SaveProduct(product);
+			await _unitOfWork.Repository<Product>().AddAsync(product);
+			_unitOfWork.SaveChanges();
 		}
 
 		public void UpdateProduct(Product product)
 		{
-			_productRepository.UpdateProduct(product);
+			_unitOfWork.Repository<Product>().Update(product);
+			_unitOfWork.SaveChanges();
 		}
 	}
 }

@@ -1,26 +1,20 @@
 ﻿using PRN222.Lab1.Repositories.Entities;
-using PRN222.Lab1.Repositories.Repositories.AccountRepository;
-using PRN222.Lab1.Repositories.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PRN222.Lab1.Repositories.Interfaces;
 
 namespace PRN222.Lab1.Services.Services.AccountService
 {
 	public class AccountService : IAccountService
 	{
-		private readonly IAccountRepository _accountRepository;
+		private readonly IUnitOfWork _unitOfWork;
 
-		public AccountService(IAccountRepository accountRepository)
+		public AccountService(IUnitOfWork unitOfWork)
 		{
-			_accountRepository = accountRepository;
+			_unitOfWork = unitOfWork;
 		}
 
 		public AccountMember GetAccountMember(string email)
 		{
-			return _accountRepository.GetAccountMember(email);
+			return _unitOfWork.Repository<AccountMember>().GetList().Where(a => a.EmailAddress.Equals(email)).FirstOrDefault();
 		}
 	}
 }

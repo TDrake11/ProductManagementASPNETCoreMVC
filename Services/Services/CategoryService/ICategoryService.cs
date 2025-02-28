@@ -9,6 +9,6 @@ namespace PRN222.Lab1.Services.Services.CategoryService
 {
 	public interface ICategoryService
 	{
-		List<Category> GetCategories();
+		Task<List<Category>> GetCategories();
 	}
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PRN222.Lab1.Repositories.Entities;
 using PRN222.Lab1.Repositories.Interfaces;
-using PRN222.Lab1.Repositories.Repositories.CategoryRepository;
 
 
 namespace PRN222.Lab1.Services.Services.CategoryService

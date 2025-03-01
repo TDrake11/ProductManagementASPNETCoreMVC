@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using PRN222.Lab1.Repositories.Entities;
 using PRN222.Lab1.Services.Services.AccountService;
+using System.Security.Claims;
 
 namespace PRN222.Lab1.ProductManagementMVC.Controllers
 {
@@ -20,25 +23,31 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Login(AccountMember model)
+		public async Task<IActionResult> LoginAsync(AccountMember model)
 		{
 			AccountMember? user = _accountService.GetAccountMember(model.EmailAddress);
 
 			if (user != null && user.MemberPassword == model.MemberPassword)
 			{
-				// Tạo Cookie để lưu thông tin đăng nhập
-				var cookieOptions = new CookieOptions
+				// Tạo danh sách Claims (dữ liệu nhận diện người dùng)
+				var claims = new List<Claim>
 				{
-					Expires = DateTime.UtcNow.AddMinutes(15), // Cookie hết hạn sau 15p
-					HttpOnly = true, // Chỉ có thể truy cập qua HTTP (bảo mật hơn, tránh JavaScript truy cập)
-					Secure = true, // Chỉ truyền cookie qua HTTPS
-					IsEssential = true // Cookie cần thiết cho ứng dụng
+					new Claim(ClaimTypes.NameIdentifier, user.MemberId.ToString()),
+					new Claim(ClaimTypes.Name, user.FullName),
+					new Claim(ClaimTypes.Email, user.EmailAddress)
 				};
 
-				HttpContext.Response.Cookies.Append("UserId", user.MemberId.ToString(), cookieOptions);
-				HttpContext.Response.Cookies.Append("Username", user.FullName, cookieOptions);
+				var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+				var authProperties = new AuthenticationProperties
+				{
+					IsPersistent = true, // Giữ trạng thái đăng nhập khi đóng trình duyệt
+					ExpiresUtc = DateTimeOffset.UtcNow.AddSeconds(15) // Hết hạn sau 15 phút
+				};
 
-				return RedirectToAction("Index", "Products"); // Điều hướng sau khi đăng nhập thành công
+				await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+					new ClaimsPrincipal(claimsIdentity), authProperties);
+
+				return RedirectToAction("Index", "Products");
 			}
 			else
 			{

@@ -1,5 +1,9 @@
-﻿@{
-    var fullName = Context.Request.Cookies["Username"]; // Lấy FullName từ Cookie
+﻿@using System.Security.Claims
+
+@{
+    var fullName = User.Identity.IsAuthenticated
+        ? User.FindFirst(ClaimTypes.Name)?.Value
+        : null;
 }
 
 <!DOCTYPE html>

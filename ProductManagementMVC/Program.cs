@@ -2,12 +2,10 @@
 using PRN222.Lab1.Services.Services.CategoryService;
 using PRN222.Lab1.Services.Services.ProductService;
 using PRN222.Lab1.Repositories.Data;
-using PRN222.Lab1.Repositories.Repositories.CategoryRepository;
-using PRN222.Lab1.Repositories.Repositories.ProductRepository;
 using PRN222.Lab1.Services.Services.AccountService;
-using PRN222.Lab1.Repositories.Repositories.AccountRepository;
 using PRN222.Lab1.Repositories.Interfaces;
 using PRN222.Lab1.Repositories.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ProductManagementMVC
 {
@@ -22,9 +20,6 @@ namespace ProductManagementMVC
 			builder.Services.AddDbContext<MyStoreDbContext>(options =>
 				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-			builder.Services.AddScoped<IProductRepository, ProductRepository>();
-			builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-			builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 			builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
@@ -33,11 +28,13 @@ namespace ProductManagementMVC
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
 			builder.Services.AddScoped<IAccountService, AccountService>();
 
-			builder.Services.AddSession(options =>
+			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+			.AddCookie(options =>
 			{
-				options.IdleTimeout = TimeSpan.FromMinutes(20); // Set sesion timeout
-				options.Cookie.HttpOnly = true; // For security
-				options.Cookie.IsEssential = true; //Ensure sesion cookie is always created
+				options.ExpireTimeSpan = TimeSpan.FromSeconds(15); // ✅ Thiết lập thời gian hết hạn cookie
+				options.Cookie.HttpOnly = true; // ✅ Bảo mật: Chỉ truy cập cookie qua HTTP, không cho JavaScript truy cập
+				options.Cookie.IsEssential = true; // ✅ Đảm bảo cookie luôn được tạo, ngay cả khi không có sự đồng ý của người dùng
+				options.SlidingExpiration = true;
 			});
 
 			var app = builder.Build();
@@ -55,8 +52,7 @@ namespace ProductManagementMVC
 
 			app.UseRouting();
 
-			app.UseSession();
-
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.MapControllerRoute(

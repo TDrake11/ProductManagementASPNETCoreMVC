@@ -1,5 +1,4 @@
-﻿using PRN222.Lab1.Repositories.Repositories.ProductRepository;
-using PRN222.Lab1.Repositories.Entities;
+﻿using PRN222.Lab1.Repositories.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +30,7 @@ namespace PRN222.Lab1.Services.Services.ProductService
 
 		public async Task<List<Product>> GetProducts()
 		{
-			return await _unitOfWork.Repository<Product>().GetList().ToListAsync();
+			return await _unitOfWork.Repository<Product>().GetList().Include(p=>p.Category).ToListAsync();
 		}
 
 		public async Task CreateProduct(Product product)

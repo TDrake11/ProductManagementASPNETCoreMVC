@@ -9,9 +9,11 @@ using PRN222.Lab1.Services.Services.CategoryService;
 using PRN222.Lab1.Services.Services.ProductService;
 using PRN222.Lab1.Repositories.Data;
 using PRN222.Lab1.Repositories.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PRN222.Lab1.ProductManagementMVC.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -28,11 +30,11 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
 		public async Task<IActionResult> Index()
 		{
 			// Kiểm tra nếu Cookie "UserId" không tồn tại (chưa đăng nhập)
-			if (string.IsNullOrEmpty(HttpContext.Request.Cookies["UserId"]))
-			{
-				// Redirect đến trang Login
-				return RedirectToAction("Login", "Account");
-			}
+			//if (string.IsNullOrEmpty(HttpContext.Request.Cookies["UserId"]))
+			//{
+			//	// Redirect đến trang Login
+			//	return RedirectToAction("Login", "Account");
+			//}
 
 			// Nếu đã đăng nhập, lấy danh sách sản phẩm
 			var myStoreDbContext = await _productService.GetProducts();
@@ -43,7 +45,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
 		// GET: Products/Details/5
 		public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+			if (id == null)
             {
                 return NotFound();
             }
@@ -60,7 +62,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
         // GET: Products/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryId");
+			ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryId");
             return View();
         }
 
@@ -83,7 +85,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+			if (id == null)
             {
                 return NotFound();
             }
@@ -135,7 +137,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+			if (id == null)
             {
                 return NotFound();
             }

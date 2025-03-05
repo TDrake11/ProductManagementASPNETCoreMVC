@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace PRN222.Lab1.Repositories.Entities
 {
-	public class Category
+	public partial class Category
 	{
 		public int CategoryId { get; set; }
 
-		[MaxLength(15)]
-		public string CategoryName { get; set; }
+		public string CategoryName { get; set; } = null!;
 
-		public ICollection<Product>? Products { get; set; }
+		public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 	}
 }

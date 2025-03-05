@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PRN222.Lab1.Repositories.Entities
 {
-	public class Product
+	public partial class Product
 	{
 		public int ProductId { get; set; }
 

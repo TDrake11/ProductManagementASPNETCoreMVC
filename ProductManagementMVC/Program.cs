@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PRN222.Lab1.Services.Services.CategoryService;
 using PRN222.Lab1.Services.Services.ProductService;
-using PRN222.Lab1.Repositories.Data;
 using PRN222.Lab1.Services.Services.AccountService;
 using PRN222.Lab1.Repositories.Interfaces;
 using PRN222.Lab1.Repositories.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using PRN222.Lab1.Repositories.Entities;
 
 namespace ProductManagementMVC
 {
-	public class Program
+    public class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -17,12 +17,10 @@ namespace ProductManagementMVC
 
 			// Add services to the container.
 			builder.Services.AddControllersWithViews();
-			builder.Services.AddDbContext<MyStoreDbContext>(options =>
-				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 			builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
+			builder.Services.AddDbContext<MyStoreDbContext>();
 			// Đăng ký Service
 			builder.Services.AddScoped<IProductService, ProductService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();

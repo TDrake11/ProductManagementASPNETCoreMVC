@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 
 namespace PRN222.Lab1.Repositories.Entities
 {
-	public class AccountMember
+	public partial class AccountMember
 	{
-		[MaxLength(20)]
-		public string MemberId { get; set; }
-		[MaxLength(80)]
-		public string MemberPassword { get; set; }
-		[MaxLength(80)]
-		public string FullName { get; set; }
-		[MaxLength(100)]
-		public string EmailAddress { get; set; }
+		public string MemberId { get; set; } = null!;
+
+		public string MemberPassword { get; set; } = null!;
+
+		public string FullName { get; set; } = null!;
+
+		public string EmailAddress { get; set; } = null!;
+
 		public int MemberRole { get; set; }
 	}
+
 }

@@ -1,4 +1,4 @@
-﻿using PRN222.Lab1.Repositories.Data;
+﻿using PRN222.Lab1.Repositories.Entities;
 using PRN222.Lab1.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PRN222.Lab1.Repositories.Repositories
 {
-	public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
 	{
 		private readonly MyStoreDbContext _context;
 

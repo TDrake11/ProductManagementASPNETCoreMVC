@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PRN222.Lab1.Services.Services.CategoryService;
 using PRN222.Lab1.Services.Services.ProductService;
-using PRN222.Lab1.Repositories.Data;
 using PRN222.Lab1.Repositories.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 namespace PRN222.Lab1.ProductManagementMVC.Controllers
 {
-    [Authorize]
+	[Authorize]
     public class ProductsController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -29,14 +24,6 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
 		// GET: Products
 		public async Task<IActionResult> Index()
 		{
-			// Kiểm tra nếu Cookie "UserId" không tồn tại (chưa đăng nhập)
-			//if (string.IsNullOrEmpty(HttpContext.Request.Cookies["UserId"]))
-			//{
-			//	// Redirect đến trang Login
-			//	return RedirectToAction("Login", "Account");
-			//}
-
-			// Nếu đã đăng nhập, lấy danh sách sản phẩm
 			var myStoreDbContext = await _productService.GetProducts();
 			return View(myStoreDbContext);
 		}
@@ -62,7 +49,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
         // GET: Products/Create
         public async Task<IActionResult> Create()
         {
-			ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryId");
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryId");
             return View();
         }
 

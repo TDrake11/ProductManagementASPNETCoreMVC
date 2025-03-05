@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PRN222.Lab1.Repositories.Data;
+using PRN222.Lab1.Repositories.Entities;
 using PRN222.Lab1.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PRN222.Lab1.Repositories.Repositories
 {
-	public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
 	{
 		private readonly MyStoreDbContext _context;
 		private readonly IServiceProvider _serviceProvider;

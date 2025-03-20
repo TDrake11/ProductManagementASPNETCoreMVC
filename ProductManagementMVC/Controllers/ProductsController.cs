@@ -49,7 +49,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
         // GET: Products/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryId");
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryName");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
                 await _productService.CreateProduct(product);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryId", product.Category);
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryName", product.Category);
             return View(product);
         }
 
@@ -82,7 +82,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryId", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetCategories(), "CategoryId", "CategoryName", product.CategoryId);
             return View(product);
         }
 
@@ -117,7 +117,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList( await _categoryService.GetCategories(), "CategoryId", "CategoryId", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList( await _categoryService.GetCategories(), "CategoryId", "CategoryName", product.CategoryId);
             return View(product);
         }
 

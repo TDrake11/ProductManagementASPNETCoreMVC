@@ -29,7 +29,7 @@ namespace ProductManagementMVC
 			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 			.AddCookie(options =>
 			{
-				options.ExpireTimeSpan = TimeSpan.FromSeconds(15); // ✅ Thiết lập thời gian hết hạn cookie
+				options.ExpireTimeSpan = TimeSpan.FromDays(7); // ✅ Thiết lập thời gian hết hạn cookie
 				options.Cookie.HttpOnly = true; // ✅ Bảo mật: Chỉ truy cập cookie qua HTTP, không cho JavaScript truy cập
 				options.Cookie.IsEssential = true; // ✅ Đảm bảo cookie luôn được tạo, ngay cả khi không có sự đồng ý của người dùng
 				options.SlidingExpiration = true;

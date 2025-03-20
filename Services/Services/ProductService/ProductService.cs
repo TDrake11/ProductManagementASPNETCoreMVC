@@ -25,7 +25,10 @@ namespace PRN222.Lab1.Services.Services.ProductService
 
 		public async Task<Product?> GetProductById(int id)
 		{
-			return await _unitOfWork.Repository<Product>().GetByIdAsync(id);
+			return _unitOfWork.Repository<Product>()
+				.GetList()
+				.Include(p=>p.Category)
+				.FirstOrDefault();
 		}
 
 		public async Task<List<Product>> GetProducts()

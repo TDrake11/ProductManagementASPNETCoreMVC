@@ -41,7 +41,7 @@ namespace PRN222.Lab1.ProductManagementMVC.Controllers
 				var authProperties = new AuthenticationProperties
 				{
 					IsPersistent = true, // Giữ trạng thái đăng nhập khi đóng trình duyệt
-					ExpiresUtc = DateTimeOffset.UtcNow.AddSeconds(15) // Hết hạn sau 15 phút
+					ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(15) // Hết hạn sau 15 phút
 				};
 
 				await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
